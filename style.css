@@ -1,0 +1,1287 @@
+/* =============== 🔥 기본 초기화 =============== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    overflow: hidden;   /* 화면 자체는 고정하고 섹션 안만 스크롤 */
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #fdfdfd;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* 섹션 내부만 스크롤하게 */
+.full-section {
+    height: 100vh;
+    overflow-y: auto;
+    display: none; /* 기본은 안 보이게 */
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px 20px 30px;
+}
+
+/* 현재 보여주는 섹션 */
+.full-section.active {
+    display: flex;
+}
+
+/* 섹션 공통 내부 래퍼 */
+.section-inner {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+/* =============== 🔐 비밀번호 입력 레이어 =============== */
+#password-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        radial-gradient(circle at 50% 0%, #283866 0%, #090b15 55%, #050609 100%);
+    z-index: 9999;
+}
+
+
+.password-box {
+    position: relative;
+    width: 85%;
+    max-width: 380px;
+    padding: 34px 30px 28px;
+    border-radius: 22px;
+
+    background: rgba(7, 10, 26, 0.78);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border: 1px solid rgba(130, 165, 255, 0.55);
+    box-shadow:
+        0 0 18px rgba(115, 170, 255, 0.70),
+        0 0 34px rgba(255, 130, 190, 0.45);
+    text-align: center;
+    overflow: hidden;
+}
+
+/* 오른쪽 위 네온 링 장식 */
+.password-box::before {
+    content: "";
+    position: absolute;
+    top: -80px;
+    right: -100px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 2px solid rgba(120, 180, 255, 0.85);
+    box-shadow:
+        0 0 10px rgba(120, 180, 255, 0.9),
+        0 0 26px rgba(120, 180, 255, 0.8);
+    opacity: 0.85;
+    pointer-events: none;
+}
+
+/* 안쪽 핑크 링 */
+.password-box::after {
+    content: "";
+    position: absolute;
+    top: -40px;
+    right: -70px;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 155, 210, 0.9);
+    box-shadow:
+        0 0 12px rgba(255, 155, 210, 0.95),
+        0 0 24px rgba(255, 155, 210, 0.7);
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+/* 제목 네온 텍스트 */
+.password-box h1 {
+    position: relative;
+    z-index: 1;
+    font-size: 22px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: #d8e1ff;
+    letter-spacing: 0.04em;
+    text-shadow:
+        0 0 4px #87a4ff,
+        0 0 10px #6f8cff,
+        0 0 18px #ff8bc7;
+}
+
+/* “비밀번호를 입력해줘” 문구 */
+.password-box p {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 14px;
+    font-size: 14px;
+    color: #ffdbf3;
+    opacity: 0.9;
+}
+
+#password-input {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 15px;
+    border-radius: 999px;
+    border: 2px solid rgba(120, 170, 255, 0.85);
+    background: rgba(6, 10, 27, 0.95);
+    color: #e3ebff;
+    outline: none;
+    box-shadow:
+        0 0 8px rgba(120, 170, 255, 0.7),
+        0 0 18px rgba(120, 170, 255, 0.4);
+    margin-bottom: 14px;
+}
+
+/* placeholder 색 */
+#password-input::placeholder {
+    color: rgba(180, 198, 255, 0.7);
+}
+
+#password-button {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 11px 14px;
+    margin-top: 2px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 170, 215, 0.95);
+    cursor: pointer;
+
+    background: linear-gradient(90deg, #ff7ecb 0%, #6f86ff 50%, #ff7ecb 100%);
+    background-size: 180% 100%;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+
+    box-shadow:
+        0 0 10px rgba(255, 140, 210, 0.85),
+        0 0 24px rgba(120, 170, 255, 0.75);
+    transition:
+        background-position 0.35s ease,
+        transform 0.12s ease,
+        box-shadow 0.2s ease;
+}
+
+/* 버튼 hover 시 네온 더 강하게 + 살짝 떠오르기 */
+#password-button:hover {
+    background-position: 100% 0;
+    transform: translateY(-1px);
+    box-shadow:
+        0 0 14px rgba(255, 160, 220, 1),
+        0 0 32px rgba(120, 180, 255, 0.95);
+}
+
+/* 버튼 눌렀을 때 */
+#password-button:active {
+    transform: translateY(1px);
+    box-shadow:
+        0 0 8px rgba(255, 140, 210, 0.8),
+        0 0 18px rgba(120, 170, 255, 0.8);
+}
+
+/* 에러 문구 */
+.error-message {
+    position: relative;
+    z-index: 1;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #ff7a9d;
+    text-shadow:
+        0 0 6px rgba(255, 90, 140, 0.8),
+        0 0 14px rgba(255, 90, 140, 0.6);
+}
+
+.error-message.shake {
+    animation: error-shake 0.25s ease;
+}
+
+@keyframes error-shake {
+    0%   { transform: translateX(0); }
+    25%  { transform: translateX(-4px); }
+    50%  { transform: translateX(4px); }
+    75%  { transform: translateX(-2px); }
+    100% { transform: translateX(0); }
+}
+
+/* ========================= */
+/* 🔽 / 🔼 공통 네비게이션 버튼 */
+/* ========================= */
+
+.nav-button {
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+
+    background: linear-gradient(90deg, #ff7ea8 0%, #ff4f9c 100%);
+    background-size: 160% 100%;
+    color: #ffffff;
+
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    transition:
+        background-position 0.25s ease,
+        transform 0.12s ease,
+        box-shadow 0.12s ease;
+}
+
+/* 작은 버튼 (↑ 이전 / 다음으로 ↓) */
+.nav-button.small {
+    padding: 8px 16px;
+    font-size: 13px;
+}
+
+.nav-button:hover {
+    background-position: 100% 0;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+}
+
+.nav-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* =============== 섹션 1: 인트로 =============== */
+#intro {
+    position: relative;
+    background: radial-gradient(circle at top, #3a3a4a 0%, #17171d 45%, #050509 100%);
+    color: #ffffff;
+    overflow: hidden;
+}
+
+/* 인트로 내용 중앙 정렬 */
+.intro-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* ✨ 별 레이어 공통 */
+.star-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-repeat: repeat;
+    opacity: 0.8;
+}
+
+/* 작은 별들 */
+.star-layer-1 {
+    background-image:
+        radial-gradient(1px 1px at 10px 10px, rgba(255,255,255,0.9), transparent 60%),
+        radial-gradient(1px 1px at 50px 80px, rgba(255,255,255,0.8), transparent 60%),
+        radial-gradient(1px 1px at 130px 40px, rgba(255,200,255,0.9), transparent 60%);
+    background-size: 120px 120px;
+    animation: stars-move-1 18s linear infinite;
+}
+
+/* 더 큰 별들 */
+.star-layer-2 {
+    background-image:
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.7), transparent 60%),
+        radial-gradient(2px 2px at 90px 110px, rgba(255,220,240,0.7), transparent 60%);
+    background-size: 180px 180px;
+    animation: stars-move-2 26s linear infinite;
+    opacity: 0.5;
+}
+
+@keyframes stars-move-1 {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-30px); }
+}
+
+@keyframes stars-move-2 {
+    from { transform: translateY(10px); }
+    to   { transform: translateY(-40px); }
+}
+
+/* ============================== */
+/* 💗 중앙 네온 하트 + 텍스트    */
+/* ============================== */
+
+.intro-heart-wrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(600px, 85vw);  /* 하트 크기 */
+    aspect-ratio: 1 / 1;
+    z-index: 3;
+}
+
+/* 하트 SVG */
+.intro-heart-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* 네온 하트 라인 */
+.intro-heart-path {
+    fill: none;
+    stroke: #ff5ca3;
+    stroke-width: 12;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    filter:
+        drop-shadow(0 0 15px rgba(255, 120, 190, 0.9))
+        drop-shadow(0 0 30px rgba(255, 120, 190, 0.55));
+
+    stroke-dasharray: 1800;
+    stroke-dashoffset: 1800;
+    animation: heart-line-draw 4s ease-in-out infinite;
+}
+
+/* 하트가 계속 그려졌다가 사라지는 애니메이션 */
+@keyframes heart-line-draw {
+    0% {
+        stroke-dashoffset: 1800;
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    45% {
+        stroke-dashoffset: 0;
+    }
+    70% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    100% {
+        stroke-dashoffset: -1800;
+        opacity: 0;
+    }
+}
+
+/* 텍스트 박스 – 하트 중앙 */
+.intro-heart-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 4;
+}
+
+/* 제목/서브/날짜 */
+.intro-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.title-underline {
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 2px;
+    width: 0;
+    background: linear-gradient(90deg, #ff9ac2, #ff7ea8);
+    border-radius: 999px;
+    animation: underline-draw 1.2s ease-out forwards;
+    animation-delay: 0.4s;
+}
+
+@keyframes underline-draw {
+    from { width: 0; }
+    to   { width: 100%; }
+}
+
+.intro-sub {
+    font-size: 16px;
+    opacity: 0.9;
+    margin-top: 10px;
+}
+
+.intro-days {
+    font-size: 14px;
+    margin-top: 6px;
+    color: #ffd3e7;
+}
+
+/* 인트로 다음 버튼: 화면 하단 중앙 */
+#intro .intro-next {
+    position: absolute;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%);
+    animation: intro-wiggle 3.5s ease-in-out infinite;
+    z-index: 5;
+    margin: 0;
+    align-self: auto;
+}
+
+/* 버튼 살짝살짝 흔들리는 효과 */
+@keyframes intro-wiggle {
+    0%, 70% { transform: translateX(-50%) translateY(0); }
+    75%     { transform: translateX(-50%) translateY(-3px); }
+    80%     { transform: translateX(-50%) translateY(2px); }
+    85%     { transform: translateX(-50%) translateY(-2px); }
+    90%     { transform: translateX(-50%) translateY(1px); }
+    100%    { transform: translateX(-50%) translateY(0); }
+}
+
+/* =============== 섹션 2: 사진 스토리북 (탐색 그리드형) =============== */
+
+#photo-story {
+    background: #ffffff;
+}
+
+/* 섹션2 안쪽 레이아웃 */
+.photo-section-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.photo-section-title {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 4px;
+}
+
+/* ✅ 인스타 돋보기처럼 딱딱 맞는 그리드 */
+.photo-feed {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 기본 3열 */
+    gap: 6px;
+    margin-top: 10px;
+}
+
+/* 그리드 타일 하나 */
+.photo-card {
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: none;
+    background: #f3f3f7;
+}
+
+/* 정사각형 유지용 래퍼 */
+.photo-thumb {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;          /* 정사각 비율 */
+    overflow: hidden;
+}
+
+/* 실제 이미지 – 타일 꽉 채우기 */
+.photo-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;          /* 인스타처럼 꽉 차고 잘릴 수 있음 */
+    display: block;
+}
+
+/* 좋아요 텍스트는 그리드에선 숨기거나 매우 작게 */
+.photo-meta {
+    display: none;              /* 필요하면 flex로 바꿔서 아래에 작게 표시해도 됨 */
+}
+
+/* 📸 사진 상세 모달 */
+#photo-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9997;
+}
+
+#photo-modal.show {
+    display: flex;
+}
+
+.photo-modal-content {
+    width: 90%;
+    max-width: 360px;
+    max-height: 80vh;
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+    position: relative;
+}
+
+/* 닫기 버튼 */
+.photo-modal-close {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    color: #555;
+    z-index: 1;
+}
+
+/* 모달 이미지 영역 */
+.photo-modal-image {
+    width: 100%;
+    max-height: 60vh;          /* 화면 60%까지만 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f3f7;
+    overflow: hidden;
+    padding: 8px;
+}
+
+/* 모달 안 실제 이미지 (여긴 잘리지 않게) */
+.photo-modal-img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;       /* 비율 유지 + 안 잘리게 */
+    display: block;
+}
+
+/* 아래 캡션 부분 */
+.photo-modal-caption-wrap {
+    padding: 12px 14px 14px 14px;
+    overflow-y: auto;
+}
+
+.photo-modal-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 6px;
+}
+
+.photo-modal-caption {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #444;
+    white-space: pre-wrap;
+}
+
+
+
+/* 🎯 섹션3: 버킷리스트 */
+#bucketlist {
+    background: #ffffff;
+}
+
+/* 히든 하트 버튼 */
+.secret-heart {
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    margin: 0 auto 6px auto;
+    display: block;
+    opacity: 0.45;
+    transition: transform 0.12s ease, opacity 0.15s ease;
+}
+
+.secret-heart:hover {
+    transform: scale(1.15);
+    opacity: 0.9;
+}
+
+.secret-heart.clicked {
+    animation: secret-heart-bounce 0.3s ease;
+}
+
+@keyframes secret-heart-bounce {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* 제목 */
+.bucket-title {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 14px;
+    color: #ff5c8c;
+}
+
+/* 카테고리 탭 영역 */
+.bucket-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.bucket-tab {
+    border: none;
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 999px;
+    background: #ffe7f1;
+    color: #aa5672;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.bucket-tab:hover {
+    transform: translateY(-1px);
+}
+
+.bucket-tab.active {
+    background: #ff7ea8;
+    color: #fff;
+}
+
+/* 카드 영역 */
+.bucket-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 55vh;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* 카드 한 개 */
+.bucket-card {
+    background: #fff7fb;
+    border-radius: 14px;
+    border: 1px solid #ffd8e8;
+    padding: 12px 14px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+}
+
+/* 카드 위 카테고리 라벨 */
+.bucket-card-category {
+    font-size: 11px;
+    margin-bottom: 4px;
+    color: #ff5c8c;
+    opacity: 0.9;
+}
+
+/* 카드 본문 텍스트 */
+.bucket-card-text {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.5;
+}
+
+/* 랜덤 추천 팝업 */
+#bucket-random-popup {
+    position: fixed;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%) translateY(20px);
+    background: #ff7ea8;
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.5;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    opacity: 0;
+    pointer-events: none;
+    max-width: 80%;
+    text-align: center;
+    z-index: 9999;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* 팝업이 보일 때 */
+#bucket-random-popup.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* =========================
+   SECTION 4 : 타임라인 + 엔딩
+========================= */
+
+.section4 {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #ffe6ef, #ffd6e8);
+}
+
+/* 내부 스크롤 영역 */
+.section4-scroll {
+  height: 100%;
+  overflow-y: auto;
+  padding: 70px 18px 110px;
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;
+}
+
+.section4-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;              /* Chrome, Safari */
+}
+
+/* 섹션 타이틀 */
+.section4 .section-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.section4 .section-subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+/* 타임라인 래퍼 */
+.timeline-wrapper {
+  position: relative;
+  max-width: 650px;
+  margin: 0 auto 60px auto;
+  padding: 10px 0 20px;
+}
+
+/* 가운데 세로 라인 */
+.timeline-line {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 3px;
+  height: 100%;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom, #ff9db8, #ff6ca2);
+  border-radius: 999px;
+  opacity: 0.7;
+}
+
+/* 각각의 아이템 공통 */
+.timeline-item {
+  position: relative;
+  width: 100%;
+  max-width: 290px;
+  margin-bottom: 36px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+/* IntersectionObserver가 붙이면 */
+.timeline-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 왼쪽 / 오른쪽 정렬 */
+.timeline-item.is-left {
+  margin-right: auto;
+  padding-right: 32px;
+}
+
+.timeline-item.is-right {
+  margin-left: auto;
+  padding-left: 32px;
+}
+
+/* 중앙 점 */
+.timeline-dot {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  background: #ff5c8c;
+  box-shadow: 0 0 0 6px rgba(255, 138, 184, 0.25);
+}
+
+/* 카드 */
+.timeline-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+/* 날짜/태그/텍스트 */
+.timeline-date {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ff4f86;
+  margin-bottom: 4px;
+}
+
+.timeline-tag {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.timeline-text {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.7;
+}
+
+/* 🩷 엔딩 블록 전체 카드 */
+.ending-block {
+  position: relative;
+  max-width: 460px;
+  margin: 80px auto 70px;
+  padding: 40px 32px 48px;
+  border-radius: 32px;
+
+  background: linear-gradient(145deg, #ffe5f0, #fff0ff);
+  box-shadow:
+    0 18px 40px rgba(255, 140, 180, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.7);
+
+  text-align: center;
+  color: #444;
+  overflow: hidden;
+}
+
+/* 부드러운 발광 효과 */
+.ending-block::before,
+.ending-block::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(32px);
+  opacity: 0.65;
+  z-index: -1;
+}
+
+.ending-block::before {
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, #ff9acb 0%, transparent 70%);
+  top: -60px;
+  left: -40px;
+}
+
+.ending-block::after {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, #ffd08a 0%, transparent 70%);
+  bottom: -70px;
+  right: -30px;
+}
+
+/* 제목 위에 작게 떠 있는 하트 */
+.ending-title {
+  position: relative;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #333;
+}
+
+.ending-title::before {
+  content: "💌";
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 1.6rem;
+  animation: endingHeart 1.8s infinite ease-in-out;
+}
+
+/* 본문 텍스트 */
+.ending-text {
+  font-size: 0.98rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 28px;
+  white-space: pre-line; /* 줄바꿈 그대로 예쁘게 */
+}
+
+/* 버튼 */
+.ending-button {
+  border: none;
+  outline: none;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff5fa2, #ff84c8);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(255, 105, 180, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.ending-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(255, 105, 180, 0.6);
+  filter: brightness(1.05);
+}
+
+.ending-button:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(255, 105, 180, 0.45);
+}
+
+/* 하트 살짝 띄워주는 애니메이션 */
+@keyframes endingHeart {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 0 6px rgba(255, 128, 180, 0.6));
+  }
+  50% {
+    transform: translateY(-4px) scale(1.05);
+    filter: drop-shadow(0 0 10px rgba(255, 128, 200, 0.9));
+  }
+}
+
+/* 모바일에서 한 줄 정렬 */
+@media (max-width: 600px) {
+  .timeline-wrapper {
+    padding-left: 26px;
+  }
+  .timeline-line {
+    left: 12px;
+    transform: none;
+  }
+  .timeline-item.is-left,
+  .timeline-item.is-right {
+    padding-left: 28px;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .timeline-dot {
+    left: 12px;
+    transform: none;
+  }
+}
+
+/* 모바일 최적화 */
+@media(max-width: 600px) {
+    .timeline-line::before { left: 12px; }
+    .timeline-item {
+        width: 100%;
+        left: 0;
+        padding-left: 35px;
+        text-align: left !important;
+    }
+    .timeline-item::before {
+        left: 6px;
+        right: auto;
+    }
+}
+
+/* 💌 편지봉투 오버레이 – 환상/마법 버전 */
+#letter-envelope-wrapper {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at top, rgba(255,255,255,0.12), transparent 55%),
+        rgba(5, 3, 26, 0.55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    z-index: 9998;
+    backdrop-filter: blur(6px);
+}
+
+#letter-envelope-wrapper.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* 봉투 전체 컨테이너 */
+.envelope {
+    position: relative;
+    width: min(420px, 90vw);
+    height: min(520px, 80vh);   /* ← 높이 추가! (핸드폰에서도 보기 좋게) */
+    max-height: 90vh;
+    transform: scale(0.85) translateY(10px);
+    opacity: 0;
+    transition:
+        transform 0.55s cubic-bezier(0.19, 1, 0.22, 1),
+        opacity 0.4s ease;
+}
+
+
+/* show 될 때 마법처럼 뿅! 하고 등장 */
+#letter-envelope-wrapper.show .envelope {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+/* 주변 환상 스파클 */
+.envelope::before,
+.envelope::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, rgba(255,255,255,0.9), transparent 60%);
+    opacity: 0.45;
+    filter: blur(6px);
+    pointer-events: none;
+    mix-blend-mode: screen;
+    animation: sparkle-orbit 6s linear infinite;
+}
+.envelope::before {
+    top: -40px;
+    left: -40px;
+}
+.envelope::after {
+    bottom: -40px;
+    right: -40px;
+    animation-delay: 1.8s;
+}
+
+/* 봉투 몸통 – 살짝만 보여주고, 메인은 편지지 */
+.envelope-body {
+    position: absolute;
+    inset: 40px 16px 0 16px;
+    background: linear-gradient(145deg, #fbe9ff, #ffe7f0);
+    border-radius: 20px;
+    box-shadow:
+        0 20px 45px rgba(0,0,0,0.28),
+        0 0 40px rgba(255,155,230,0.6);
+}
+
+/* 봉투 플랩 – 위에서 아래로 덮는 삼각형 */
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 16px;
+    right: 16px;
+    height: 60%;
+    background: radial-gradient(circle at top, #ffe4ff, #e4c9ff);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transform: rotateX(0deg);
+    transition: transform 0.6s ease 0.18s;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+/* show 될 때 플랩이 ‘탁’ 열리기 */
+#letter-envelope-wrapper.show .envelope-flap {
+    transform: rotateX(175deg);
+}
+
+/* 편지지 */
+.letter-paper {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 10px;
+    top: 54px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    border-radius: 22px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+    transition:
+        opacity 0.55s ease 0.3s,
+        transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+}
+
+/* show 되면 편지지가 위로 ‘슉’ + 살짝 튕기듯 등장 */
+#letter-envelope-wrapper.show .letter-paper {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* 편지 종이 내부 */
+.letter-paper-inner {
+    flex: 1;
+    padding: 18px 20px 10px 20px;
+    background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.9), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,0.85), transparent 60%),
+        linear-gradient(145deg, #fef9ff 0%, #fdf4ff 45%, #f7f0ff 100%);
+    background-blend-mode: screen;
+    box-shadow:
+        inset 0 0 10px rgba(255,255,255,0.8),
+        0 0 25px rgba(170,140,255,0.45);
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.75);
+    overflow-y: auto;
+    position: relative;
+}
+
+/* 안쪽에 은은한 별빛 */
+.letter-paper-inner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,0.5) 0, transparent 55%),
+        radial-gradient(circle at 80% 10%, rgba(255,225,255,0.5) 0, transparent 55%),
+        radial-gradient(circle at 30% 80%, rgba(210,190,255,0.6) 0, transparent 55%);
+    opacity: 0.5;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    animation: starlight 7s ease-in-out infinite alternate;
+}
+
+/* 헤더 & 본문 글씨 – 깔끔한 필기 느낌으로 */
+.letter-header {
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #5b427f;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    font-family: "Cafe24 Ssurround", "Pretendard", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.letter-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #4b3a66;
+    white-space: pre-wrap;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    font-family: "Pretendard", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* JS 에서 visible 붙으면 타이핑 끝난 뒤 서서히 나타나게 */
+.letter-text.visible {
+    opacity: 1;
+}
+
+/* 닫기 버튼 */
+.close-letter {
+    border: none;
+    background: linear-gradient(135deg, #ff7fb0, #ff96e6);
+    color: #fff;
+    font-size: 14px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    margin: 10px auto 6px;
+    display: block;
+    cursor: pointer;
+    box-shadow:
+        0 4px 10px rgba(0,0,0,0.25),
+        0 0 18px rgba(255,140,210,0.7);
+    transition:
+        transform 0.16s ease,
+        box-shadow 0.16s ease,
+        filter 0.16s ease;
+}
+
+.close-letter:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+    box-shadow:
+        0 6px 16px rgba(0,0,0,0.3),
+        0 0 22px rgba(255,160,230,0.9);
+}
+
+/* ✨ 스크롤바 살짝만 보이게 */
+.letter-paper-inner::-webkit-scrollbar {
+    width: 4px;
+}
+.letter-paper-inner::-webkit-scrollbar-thumb {
+    background: rgba(150,120,210,0.7);
+    border-radius: 999px;
+}
+
+/* 모바일 – 화면에 알맞게 꽉 차는 느낌 */
+@media (max-width: 480px) {
+    #letter-envelope-wrapper {
+        align-items: center;
+        padding: 0 10px;
+    }
+    .envelope {
+        width: 100%;
+        max-width: 100%;
+    }
+    .envelope-body {
+        inset: 34px 8px 0 8px;
+    }
+    .envelope-flap {
+        left: 8px;
+        right: 8px;
+    }
+    .letter-paper {
+        left: 14px;
+        right: 14px;
+        top: 48px;
+    }
+}
+
+/* ===== 애니메이션 키프레임들 ===== */
+@keyframes sparkle-orbit {
+    0%   { transform: translate(0, 0) scale(1); opacity: 0.4; }
+    50%  { transform: translate(10px, -8px) scale(1.05); opacity: 0.7; }
+    100% { transform: translate(-6px, 6px) scale(1); opacity: 0.4; }
+}
+
+@keyframes starlight {
+    0%   { opacity: 0.35; transform: translateY(0); }
+    50%  { opacity: 0.7;  transform: translateY(-4px); }
+    100% { opacity: 0.45; transform: translateY(2px); }
+}
+
+
+/* 모바일에서 편지 화면 꽉 차게 느낌 강화 */
+@media (max-width: 480px) {
+  #letter-envelope-wrapper {
+    align-items: center;
+  }
+  .envelope {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    transform: scale(1);
+  }
+  #letter-envelope-wrapper.show .envelope {
+    transform: scale(1);
+  }
+}
+

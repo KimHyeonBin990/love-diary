@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>현빈이와 지원이의 연애일기</title>
+
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <!-- 비밀번호 레이어 -->
+    <div id="password-overlay">
+        <div class="password-box">
+            <h1>현빈이와 지원이의 연애일기</h1>
+            <p>비밀번호를 입력해줘</p>
+            <input type="password" id="password-input" placeholder="비밀번호" />
+            <button id="password-button">확인</button>
+            <p id="password-error" class="error-message"></p>
+        </div>
+    </div>
+
+    <main id="main-content">
+        <!-- 섹션 1: 인트로 -->
+        <section id="intro" class="full-section">
+            <div class="star-layer star-layer-1"></div>
+            <div class="star-layer star-layer-2"></div>
+
+            <div class="section-inner intro-inner">
+                <!-- 하트 + 텍스트 전체 래퍼 -->
+                <div class="intro-heart-wrap">
+                    <!-- 네온 하트 SVG -->
+                    <svg class="intro-heart-svg" viewBox="0 0 600 500">
+                        <path
+                            class="intro-heart-path"
+                            d="
+                                M300 440
+                                C 120 300,  60 160, 150  90
+                                C 220  35, 300 100, 300 160
+                                C 300 100, 380  35, 450  90
+                                C 540 160, 480 300, 300 440
+                                Z
+                            "
+                        />
+                    </svg>
+
+                    <!-- 하트 안에 들어갈 텍스트 -->
+                    <div class="intro-heart-text">
+                        <h2 class="intro-title">
+                            현빈이와 지원이의 연애일기
+                            <span class="title-underline"></span>
+                        </h2>
+                        <p class="intro-sub">이 페이지는 자기한테만 보여주는 거야.</p>
+                        <p class="intro-days" id="days-counter"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 다음: 바로 사진 스토리로 -->
+            <button class="nav-button nav-next intro-next" data-target="photo-story">
+                우리 이야기 보러가기 ↓
+            </button>
+        </section>
+
+                <!-- 섹션 2: 인스타 탐색탭 스타일 그리드 -->
+        <section id="photo-story" class="full-section">
+            <!-- 이전: 인트로 -->
+            <button class="nav-button nav-prev small" data-target="intro">
+                ↑ 이전
+            </button>
+
+            <div class="section-inner photo-section-inner">
+                <h2 class="photo-section-title">우리의 추억들</h2>
+
+                <!-- 📸 JS로 카드가 들어갈 그리드 -->
+                <div class="photo-feed"></div>
+            </div>
+
+            <!-- 다음: 버킷리스트 -->
+            <button class="nav-button nav-next small" data-target="bucketlist">
+                다음으로 ↓
+            </button>
+        </section>
+
+        <!-- 📸 사진 상세 모달 -->
+        <div id="photo-modal">
+            <div class="photo-modal-content">
+                <button class="photo-modal-close">×</button>
+
+                <div class="photo-modal-image">
+                    <img id="photo-modal-image" class="photo-modal-img" alt="추억 사진" />
+                </div>
+
+                <div class="photo-modal-caption-wrap">
+                    <div class="photo-modal-label" id="photo-modal-label"></div>
+                    <div class="photo-modal-caption" id="photo-modal-caption"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- 섹션 3: 버킷리스트 + 히든 하트 -->
+        <section id="bucketlist" class="full-section">
+            <!-- 이전: 사진 스토리 -->
+            <button class="nav-button nav-prev small" data-target="photo-story">
+                ↑ 이전
+            </button>
+
+            <div class="section-inner">
+                <!-- 💜 히든 하트 버튼 -->
+                <button id="bucket-heart-trigger" class="secret-heart" aria-label="비밀 하트">
+                    💜
+                </button>
+
+                <h2 class="bucket-title">버킷리스트</h2>
+
+                <!-- 카테고리 탭 -->
+                <div class="bucket-tabs">
+                    <button class="bucket-tab active" data-category="all">전체</button>
+                    <button class="bucket-tab" data-category="date">💗 감성</button>
+                    <button class="bucket-tab" data-category="trip">✈ 여행</button>
+                    <button class="bucket-tab" data-category="activity">🎨 체험</button>
+                    <button class="bucket-tab" data-category="record">📸 기록</button>
+                    <button class="bucket-tab" data-category="home">🏠 집콕</button>
+                    <button class="bucket-tab" data-category="special">🎁 특별</button>
+                </div>
+
+                <!-- 카드 리스트 영역 -->
+                <div id="bucket-cards" class="bucket-card-wrapper">
+                    <!-- JS로 카드들 자동 생성 -->
+                </div>
+
+                <!-- 랜덤 추천 버튼 -->
+                <button id="bucket-random" class="nav-button" style="margin-top:25px;">
+                    ❤️
+                </button>
+
+                <!-- 랜덤 추천 팝업 -->
+                <div id="bucket-random-popup"></div>
+            </div>
+
+            <!-- 다음: 타임라인 -->
+            <button class="nav-button nav-next small" data-target="timeline">
+                다음으로 ↓
+            </button>
+        </section>
+
+ <!-- SECTION 4 : 타임라인 + 엔딩 -->
+<section id="timeline" class="full-section section4">
+
+  <!-- 배경으로 떠다니는 사진들 -->
+  <div class="ending-photos" id="endingPhotos"></div>
+
+  <!-- 실제로 스크롤 되는 영역 -->
+  <div class="section4-scroll">
+    <h2 class="section-title">우리의 타임라인</h2>
+    <p class="section-subtitle">
+      여기까지 우리가 함께 걸어온 순간들을 살짝 모아봤어.
+    </p>
+
+    <!-- 타임라인 -->
+    <div class="timeline-wrapper">
+      <div class="timeline-line"></div>
+
+      <!-- 1 -->
+      <article class="timeline-item is-left">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">2024. 01. 17</div>
+          <div class="timeline-tag">인성캠프</div>
+          <p class="timeline-text">
+            이 날이 모든 시작이었지.<br>
+            그땐 몰랐지! 
+            우리가 이렇게 가까워질 줄은
+          </p>
+        </div>
+      </article>
+
+      <!-- 2 -->
+      <article class="timeline-item is-right">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">2024. 10. 28</div>
+          <p class="timeline-text">
+            이 날이 없었으면 우리는 못 만났겠지?<br>
+            휴… 좋은 이미지로 남아서 진짜 다행이다!
+          </p>
+        </div>
+      </article>
+
+      <!-- 3 -->
+      <article class="timeline-item is-left">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">2024. 11. 02</div>
+          <p class="timeline-text">
+            내가 다시 보고 싶어서 허씨한테 살짝 눈치 주고,<br>
+            간신히 자기 꼬신 날. 이메일로 꼬신 남자...
+          </p>
+        </div>
+      </article>
+
+      <!-- 4 -->
+      <article class="timeline-item is-right">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">2024. 11. 10</div>
+          <div class="timeline-tag">사귀기 전 첫 데이트</div>
+          <p class="timeline-text">
+            청설! 그날 엄청 떨렸는데…<br>
+            저녁 간단히 먹구 석촌호수!
+          </p>
+        </div>
+      </article>
+
+      <!-- 5 -->
+      <article class="timeline-item is-left">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">2024. 12. 09</div>
+          <div class="timeline-tag">1일</div>
+          <p class="timeline-text">
+            소방관… 눈물 조금 훔치고,<br>
+            나 이 날 진짜 하나도 안 추웠어.<br>
+            “ㅈ..저 많이 조..좋아해요…” ㅋㅋㅋㅋ
+          </p>
+        </div>
+      </article>
+
+      <!-- 6 -->
+      <article class="timeline-item is-right">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">2024. 12. 14</div>
+          <div class="timeline-tag">사귀고 첫 데이트</div>
+          <p class="timeline-text">
+            연극 보던 날! 진짜 레전드였지.<br>
+            덕분에 더 친해지고 더 가까워졌어.<br>
+            토끼정.. 
+          </p>
+        </div>
+      </article>
+
+      <!-- 7 -->
+      <article class="timeline-item is-left">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">2024. 12. 25</div>
+          <div class="timeline-tag">크리스마스</div>
+          <p class="timeline-text">
+            자기가 사준 핸드크림, 첫 편지…<br>
+            하나하나 전부 기분 너무 좋았어.<br>
+            다음 크리스마스는 부산에서 보내자!
+          </p>
+        </div>
+      </article>
+
+      <!-- 8 -->
+      <article class="timeline-item is-right">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">2025. 03. 19</div>
+          <div class="timeline-tag">101일</div>
+          <p class="timeline-text">
+            기대하던 남산타워!<br>
+            날씨도 완전 GOOD!<br>
+            사진 보니까 또 보고 싶다.
+          </p>
+        </div>
+      </article>
+
+      <!-- 9 -->
+      <article class="timeline-item is-left">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">2025. 12. 09</div>
+          <div class="timeline-tag">1주년</div>
+          <p class="timeline-text">
+            우리 자기 시험 화이팅하고!<br>
+            드디어 1학년 끝난다… 너무 고생 많았어.<br>
+            가족 여행도 조심히 잘 다녀오고!<br>
+            사랑해 ❤️
+          </p>
+        </div>
+      </article>
+    </div>
+
+    <!-- 엔딩 블록 -->
+    <div class="ending-block">
+      <h3 class="ending-title">우리 이야기의 지금 페이지</h3>
+      <p class="ending-text">
+        여기까지는 우리가 함께 써온 이야기야.<br>
+        앞으로 채워갈 페이지가 더 많을 거야.<br>
+        내 옆에 있어줘서 고마워.<br>
+        사랑해 ❤️
+      </p>
+      <button class="ending-button" type="button" onclick="goToFirstSection()">
+  맨 처음으로 돌아가기 ↑
+</button>
+
+    </div>
+  </div>
+</section>
+
+    </main>
+
+    <!-- 💌 편지봉투 모달 (전역 오버레이) -->
+    <div id="letter-envelope-wrapper">
+        <div class="envelope">
+            <!-- 봉투 플랩(뚜껑) -->
+            <div class="envelope-flap"></div>
+            <!-- 봉투 몸통 -->
+            <div class="envelope-body"></div>
+
+            <!-- 편지지 -->
+            <div class="letter-paper">
+                <div class="letter-paper-inner">
+                    <div class="letter-header">To. 지원이에게</div>
+                    <div class="letter-text" id="letter-text"></div>
+                </div>
+                <button class="close-letter">♥ 닫기</button>
+            </div>
+        </div>
+    </div>
+</body>
+<audio id="bgm" src="bgm.mp3" loop></audio>
+
+</html>
