@@ -10,11 +10,13 @@ html, body {
 }
 
 body {
-    overflow: hidden;   /* 화면 자체는 고정하고 섹션 안만 스크롤 */
-    font-family: 'Noto Sans KR', sans-serif;
-    background-color: #fdfdfd;
+    overflow: hidden;      /* 화면 자체는 고정 */
+    font-family: "Noto Sans KR", sans-serif;
+    background-color: #fffdfd;
     color: #333;
     line-height: 1.5;
+    touch-action: none;    /* 터치 제스처 기본 동작 막기 */
+    font-size: 16px;
 }
 
 /* 섹션 내부만 스크롤하게 */
@@ -1285,3 +1287,28 @@ body {
   }
 }
 
+@media (max-width: 480px) {
+    body {
+        font-size: 18px; /* 전체 기본 폰트 크게 */
+    }
+
+    .timeline-text,
+    .timeline-date,
+    .timeline-tag {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .letter-paper-inner {
+        font-size: 18px;
+    }
+
+    .intro-title {
+        font-size: 28px;
+    }
+
+    .nav-button {
+        font-size: 18px;
+        padding: 14px 20px;
+    }
+}
